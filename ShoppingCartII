@@ -1,0 +1,292 @@
+// Shopping Cart Project Part II
+// By: Regan Wilson
+// Date: 3/29/2022
+// Purpose: This program will allow a customer to complete one out of five available functions
+ 
+ 
+#include <iostream>
+#include <string>
+#include <limits>
+#include <iomanip>
+ 
+using namespace std;
+ 
+//Function to purchase an item
+void purchase(string name,string username,string password,string address, string account_number,float store_credit, string member_level)
+{
+ string sku, item_name;
+ int items_in_unit, quantity_on_hand_per_unit, quantity_on_hand_per_item, quantity_purchased;
+ float price_per_item,total_price,subtotal, price_per_unit,discount;
+ const float sales_tax = 1.06;
+  //User item and quantity input
+ cout << "Please enter the SKU for the item you wish to purchase: ";
+ cin >> sku;
+ cout << "Quantity: ";
+ cin >> quantity_purchased;
+ 
+ if (sku == "HF-342" || sku == "LK-322"|| sku == "KF-231")
+ {
+   //Item Price
+   if (sku == "HF-342")
+   {
+     quantity_on_hand_per_unit = 200;
+     quantity_on_hand_per_item = quantity_on_hand_per_unit * 50;
+     item_name = "1/2 Bolt";
+     price_per_unit = 20.00;
+     price_per_item = price_per_unit / 50;
+   }
+   else if (sku == "LK-322")
+   {
+     quantity_on_hand_per_unit = 76;
+     quantity_on_hand_per_item = quantity_on_hand_per_unit * 25;
+     item_name = "1/4 Nail";
+     price_per_unit = 5.75;
+     price_per_item = price_per_unit / 25;
+   }
+   else 
+   {
+     quantity_on_hand_per_unit = 100;
+     quantity_on_hand_per_item = 100;
+     item_name = "Hammer";
+     price_per_unit = 15.23;
+     price_per_item = 15.23;
+   }
+   //Total Price Calculation
+   if (quantity_purchased <= quantity_on_hand_per_item)
+   {
+     subtotal = (price_per_item * quantity_purchased);
+     //Discount Calculation
+     if (member_level == "Blue" && subtotal >= 100)
+     {
+       discount = 0.06;
+     }
+     else if (member_level == "Gold" && subtotal >= 100)
+     {
+       if (subtotal >= 300)
+       {
+         discount = 0.085;
+       }
+       else
+       {
+         discount = 0.06;
+       }
+     }
+     else if (member_level == "Diamond" && subtotal >= 100)
+     {
+       if (subtotal >= 700)
+       {
+         discount = 0.12;
+       }
+       else if (subtotal >= 300 && subtotal < 700)
+       {
+         discount = 0.085;
+       }
+       else
+       {
+         discount = 0.06;
+       }
+     }
+     else
+     {
+       discount = 0;
+     }
+ 
+     total_price = (subtotal - (subtotal * discount)) * sales_tax;
+     //Receipt Output
+     if (total_price <= store_credit)
+     {
+       cout << "Receipt For " << name << endl;
+       cout << "Member Level: " << member_level << endl;
+       cout << "Account Number: " << account_number << endl;
+       cout << "Address: " << address << endl;
+       cout << "Item Purchased: " << item_name << endl;
+       cout << "Quantity: " << quantity_purchased << endl;
+       cout << "Subtotal: $" << subtotal << endl;
+       cout << "Discount: " << discount * 100 << "%" << endl;
+       cout << "Sales Tax: 6%" << endl;
+       cout << "Total: $" << total_price << endl;
+       cout << "Remaining Store Credit Balance: $" << store_credit - total_price << endl;
+     }
+     else
+     {
+       cout << "Insufficient Funds." << endl;
+     }
+   }
+   else
+   {
+     cout << "Sorry, insufficient quantity." << endl;
+   }
+ }
+ 
+ else
+ {
+   cout << "SKU could not be found." << endl;
+ }
+}
+//Function to view available items
+void view_items()
+{
+ cout << "Items Available: " << setw(5) << "SKU:" << endl;
+ cout << "1/2 in Bolt" << setw(13) << "HF-342" << endl;
+ cout << "1/4 in Nail" << setw(13) << "LK-322" << endl;
+ cout << "Hammer" << setw(18) << "KF-231" << endl;
+}
+ 
+//Function to get an estimate
+void get_estimate()
+{
+ string sku;
+ int quantity_purchased;
+ float price_estimate, price_per_item, price_per_unit;
+ cout << "Please enter the SKU for the item you wish to purchase: ";
+ cin >> sku;
+ cout << "Quantity: ";
+ cin >> quantity_purchased;
+  if (sku == "HF-342" || sku == "LK-322"|| sku == "KF-231")
+ {
+   if (sku == "HF-342")
+   {
+     price_per_unit = 20.00;
+     price_per_item = price_per_unit / 50;
+   }
+   else if (sku == "LK-322")
+   {
+     price_per_unit = 5.75;
+     price_per_item = price_per_unit / 25;
+   }
+   else 
+   {
+     price_per_unit = 15.23;
+     price_per_item = 15.23;
+   }
+   price_estimate = price_per_item * quantity_purchased;
+   cout << "Estimated Price: $" << price_estimate << endl;
+ }
+ else
+ {
+   cout << "SKU could not be found." << endl;
+ }
+}
+ 
+//Function to update account information
+void update_account_information(string username,string password, string member_level, string address, string account_number)
+{
+ string new_information;
+ int user_choice, number_of_updates, i;
+ cout << "You are able to update your password, member level, address, and account number." << endl;
+ cout << "How many of these will you be updating?: ";
+ cin >> number_of_updates;
+ i = 0;
+ while (i < number_of_updates)
+ {
+   cout << "Update you password (1), member level (2), address (3), account number (4)?: ";
+   cin >> user_choice;
+   if (user_choice == 1)
+   {
+     cout << "New Password: ";
+     cin >> new_information;
+     password = new_information;
+   }
+   else if (user_choice == 2)
+   {
+     cout << "New member level: ";
+     cin >> new_information;
+     member_level = new_information;
+   }
+   else if (user_choice == 3)
+   {
+     cout << "New address: ";
+     cin.ignore();
+     getline(cin,new_information);
+     address = new_information;
+   }
+   else if (user_choice == 4)
+   {
+     cout << "New account number: ";
+     cin >> new_information;
+     account_number = new_information;
+   }
+   else
+   {
+     cout << "Invalid Input.";
+   }
+   i++;
+ }
+ //Output for updated account information
+ cout << "Updated Account Information: " << endl;
+ cout << "Username: " << username << endl;
+ cout << "Password: " << password << endl;
+ cout << "Member Level: " << member_level << endl;
+ cout << "Account Number: " << account_number << endl;
+ cout << "Address: " << address << endl;
+}
+//Function to log out of program
+void log_out()
+{
+ cout << "You are logged out. Thank you for shopping." << endl;
+}
+ 
+int main()
+{
+  //Customer Input & Information
+ std::string name, username, password, member_level, address, account_number;
+ float store_credit;
+ cout << "Enter your username:";
+ getline(cin, username);
+ cout << "Enter your password:";
+ getline(cin, password);
+ name = "Jane Smith";
+ member_level = "Gold";
+ account_number = "123456789";
+ store_credit = 3000.00;
+ address = "100 W New Haven Ave, Melbourne, FL 32901";
+  //User Authentication
+ if (username == "jsmith" && password == "blue123")
+ {
+   //User Input for function choice
+   int function_selection;
+   cout << "Welcome " << name << ". What would you like to do today?" << endl;
+   cout << "Enter the corresponding number: " << endl;
+   cout << "Make a purchase: 1" << endl;
+   cout << "View available items: 2" << endl;
+   cout << "Get an estimate: 3" << endl;
+   cout << "Update account information: 4" << endl;
+   cout << "Log Out: 5" << endl;
+   cin >> function_selection;
+ 
+   if (function_selection == 1)
+   {
+     view_items();
+     purchase(name,username,password,address,account_number,store_credit,member_level);
+     log_out();
+   }
+   else if (function_selection == 2)
+   {
+     view_items();
+     log_out();
+   }
+   else if (function_selection == 3)
+   {
+     view_items();
+     get_estimate();
+     log_out();
+   }
+   else if (function_selection == 4)
+   {
+     update_account_information(username,password,member_level,address,account_number);
+     log_out();
+   }
+   else if (function_selection == 5)
+   {
+     log_out();
+   }
+   else
+   {
+     cout << "Invalid Input.";
+   }
+ }
+ else
+ {
+   cout << "Incorrect Credentials, Please Try Again" << endl;
+ }
+}
